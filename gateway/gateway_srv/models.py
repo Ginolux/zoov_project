@@ -1,8 +1,8 @@
 from mongoengine import Document, fields
-from application import db
+# from application import db
 
 
-class Bikes(db.Document):
+class Bikes(Document):
     _id = fields.ObjectIdField()
     id = fields.StringField()
     location = fields.DictField(

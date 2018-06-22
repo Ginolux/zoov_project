@@ -1,15 +1,10 @@
-from application import create_app
-from flask_restful import Resource, Api
-from flask import Blueprint
-from flask import jsonify
+from flask import Blueprint, jsonify
+from flask_restful import Api, Resource
 
 from .models import Bikes
-# import bikes_db
 
-# bikes = bikes_db
-
-gateway_app = Blueprint('gateway_app', __name__)
-api = Api(gateway_app)
+bike_app = Blueprint('bike_app', __name__)
+api = Api(bike_app)
 
 # class AllBikes(Resource):
 
@@ -28,6 +23,7 @@ class AllBikes(Resource):
 
 api.add_resource(AllBikes, '/')
 
+
 class Bike(Resource):
 
     def get(self, bike_id):
@@ -36,3 +32,9 @@ class Bike(Resource):
         return jsonify({'bike': bike})
 
 api.add_resource(Bike, '/<string:bike_id>')
+
+
+class LocationUpdate(Resource):
+
+    def get(self, update):
+        pass
