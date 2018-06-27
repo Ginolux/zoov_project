@@ -14,7 +14,7 @@ class BikesEndpoint(Resource):
     Bikes service
     '''
     def get(self):
-        r = requests.get('http://localhost:8081')
+        r = requests.get('http://0.0.0.0:8081')
         return r.json()
 
 api.add_resource(BikesEndpoint, '/bikeservice')
@@ -25,7 +25,7 @@ class TripsEndpoint(Resource):
     Trips service
     '''
     def get(self):
-        r = requests.get('http://localhost:8082')
+        r = requests.get('http://0.0.0.0:8082')
         return r.json()
 
 api.add_resource(TripsEndpoint, '/tripservice')
@@ -38,7 +38,7 @@ class BikeIdEndpoint(Resource):
     Get bike by id
     '''
     def get(self, bike_id):
-        r = requests.get('http://localhost:8081/{}'.format(bike_id))
+        r = requests.get('http://0.0.0.0:8081/{}'.format(bike_id))
         return r.json()
 
 api.add_resource(BikeIdEndpoint, '/bikeservice/<string:bike_id>')
@@ -49,7 +49,7 @@ class TripIdEndpoint(Resource):
     Get trip by id
     '''
     def get(self, trip_id):
-        r = requests.get('http://localhost:8082/{}'.format(trip_id))
+        r = requests.get('http://0.0.0.0:8082/{}'.format(trip_id))
         return r.json()
 
 api.add_resource(TripIdEndpoint, '/tripservice/<string:trip_id>')
@@ -98,11 +98,11 @@ class GatewayRouting(Resource):
             data = Bike_db.objects.get(id=given_id)
 
             if data.status == 1:
-                # r = requests.get('http://localhost:8082/{}'.format(given_id))
-                r = requests.get('http://localhost:8082/start/{}'.format(given_id))
+                # r = requests.get('http://0.0.0.0:8082/{}'.format(given_id))
+                r = requests.get('http://0.0.0.0:8082/start/{}'.format(given_id))
                 return r.json()
 
-        r = requests.get('http://localhost:8082/end/{}'.format(given_id))
+        r = requests.get('http://0.0.0.0:8082/end/{}'.format(given_id))
         return r.json()
 
 api.add_resource(GatewayRouting, '/<string:given_id>')
