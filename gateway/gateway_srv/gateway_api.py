@@ -1,4 +1,7 @@
-from flask import Blueprint, jsonify
+# import pika
+# import uuid
+import requests
+from flask import Blueprint, jsonify, make_response
 from flask_restful import Api, Resource
 
 from .models import Bikes
@@ -10,32 +13,34 @@ from .models import Bikes
 gateway_app = Blueprint('gateway_app', __name__)
 api = Api(gateway_app)
 
-# class AllBikes(Resource):
+# Bike service
+class BikesEndpoint(Resource):
+    def get(self):
+        r = requests.get('http://localhost:8081/')
+        return r.json()
 
-#     def get(self, name):
-#         return {'owner': name}
+api.add_resource(BikesEndpoint, '/bikeservice')
 
-# api.add_resource(AllBikes, '/owner/<string:name>')
 
-class AllBikes(Resource):
+# Send id to Bike service
+class BikeIdEndpoint(Resource):
+    def get(self, bike_id):
+        r = requests.get('http://localhost:8081/{}'.format(bike_id))
+        return r.json()
+
+api.add_resource(BikeIdEndpoint, '/bikeservice/<string:bike_id>')
+
+
+class Gateway(Resource):
+    def __init__(self):
+        self.bikes_endpoint = BikesEndpoint()
+        self.bike_id_endpoint = BikeIdEndpoint()
 
     def get(self):
-        # bikes = Bikes.objects.filter(id="bb3398hl52n3nnikktn0")
-        bikes = Bikes.objects.all().values_list('id')
+        result = {
+            'bikes endpoint': self.bikes_endpoint.get(),
+            'bike id endpoint': self.bike_id_endpoint.get('bb2cdchl52n4orsopmtg')
+        }
+        return result
 
-        return jsonify({'all_bikes': bikes})
-
-api.add_resource(AllBikes, '/')
-
-class Bike(Resource):
-
-    def get(self, bike_id):
-        bike = Bikes.objects.filter(id=bike_id)
-
-        if 'status' not in bike:
-            return jsonify({'message': 'The bike deos not have status'})
-            
-
-        return jsonify({'bike': bike})
-
-api.add_resource(Bike, '/<string:bike_id>')
+api.add_resource(Gateway, '/')

@@ -16,7 +16,7 @@ manager.add_command('runserver', Server(
     use_debugger = True,
     use_reloader = True,
     host=os.getenv('IP', 'localhost'),
-    port = int(os.getenv('PORT', 8081))
+    port = int(os.getenv('PORT', 8082))
 ))
 
 

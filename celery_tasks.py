@@ -1,6 +1,6 @@
 from celery import Celery
 
-app = Celery('tasks', broker='pyamqp://localhost')
+app = Celery('tasks',backend='rpc://', broker='pyamqp://localhost')
 
 @app.task
 def add(x, y):
