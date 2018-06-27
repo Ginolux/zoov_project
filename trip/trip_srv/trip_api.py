@@ -1,15 +1,15 @@
+import datetime
+import logging
 import socket
 import threading
 from uuid import uuid4
+
 from flask import Blueprint, jsonify
-# import pika
 from flask_mongoengine import mongoengine
 from flask_restful import Api, Resource
 from kombu import Connection, Consumer, Exchange, Queue
-import logging
-import datetime
 
-from .models import Bike_test, Trip_srv, Trip_test
+from .models import Bike_db, Trip_db
 
 trip_app = Blueprint('trip_app', __name__)
 api = Api(trip_app)
@@ -18,88 +18,83 @@ api = Api(trip_app)
 class AllTrips(Resource):
 
     def get(self):
-        # bikes = Bikes.objects.filter(id="bb3398hl52n3nnikktn0")
-        # bikes = Bikes.objects.all().values_list('id')
-        trip = Trip_test.objects.all()
+        trips = Trip_db.objects.all()
 
-        return jsonify({'all_trips': trip})
+        return jsonify(trips)
 
 api.add_resource(AllTrips, '/')
+
+
+class Trip(Resource):
+
+    def get(self, trip_id):
+        trip = Trip_db.objects.filter(id=trip_id)
+
+        return jsonify(trip)
+
+api.add_resource(Trip, '/<string:trip_id>')
+
 
 # logging.basicConfig(level=logging.DEBUG)
 class StartTrip(Resource):
 
     def get(self, bike_id):
-        bike = Bike_test.objects.get(id=bike_id)
+        bike = Bike_db.objects.get(id=bike_id)
 
         
-        if bike.status == 1:
-            new_trip = Trip_test( 
-                    bike_id=str(bike.id),
-                    locations=[bike.location],
-                    ended_at=""
-                    )
+        # if bike.status == 1:  # recheck bike status
+        new_trip = Trip_db( 
+                bike_id=str(bike.id),
+                locations=[bike.location],
+                ended_at=""
+                )
 
-            logging.debug('********Update bike id')
-            bike.update(status=0) 
-            bike.save()
+        # update bike status to 0 (ie. non available)
+        bike.update(status=0) 
+        bike.save()
+        
+        new_trip.status = 0       # set trip status to 0 (ie. non available)
 
-            logging.debug('********Update trip id to 1')
-            new_trip.status = 0
+        new_trip.started_at = str(datetime.datetime.today())      # record started time
 
-            logging.info('**********Start trip')
-            new_trip.started_at = str(datetime.datetime.today())
+        new_trip.save()     # create trip record
 
-            logging.debug('Create new record')
-            ### trip.update(status=trip.status, started_at=trip.started_at, bike_id=trip.bike_id)
-            new_trip.save()
+        retrieve_new_trip = Trip_db.objects.get(id=new_trip.id)   # query database to retrieve created trip
+        new_trip_id = str(retrieve_new_trip.id)     # get new trip id
 
-            retrieve_new_trip = Trip_test.objects.get(id=new_trip.id) #Query database
-            new_trip_id = str(retrieve_new_trip.id)
+        return jsonify({'New trip ID': new_trip_id})
 
-            logging.info('*******Return Trip ID')
-            # return jsonify({'trip': trip.id})
-            return jsonify({'New trip ID': new_trip_id})
-
-            
-        if not bike:
-            return {'message': 'Bike not found.'}
             
 api.add_resource(StartTrip, '/start/<string:bike_id>')
 
 
 class EndTrip(Resource):
     def get(self, trip_id):
-        trip = Trip_test.objects.get(id=trip_id)
-        bike = Bike_test.objects.get(id=trip.bike_id)
+        trip = Trip_db.objects.get(id=trip_id)
+        bike = Bike_db.objects.get(id=trip.bike_id)
 
-        if bike.status == 0:
+        if bike.status == 0: # recheck bike status
             logging.debug('********Update bike id')
-            # bike = Bike_test.objects.get(id=trip.bike_id)
-            bike.update(status=1) 
+            # bike = Bike_db.objects.get(id=trip.bike_id)
+            bike.update(status=1)  # update bike status to 1 (ie. available)
             bike.save()
 
-            logging.debug('********Update trip id to 0: make available')
-            trip.status = 1
+            trip.status = 1     # update trip status to 1 (ie. available)
 
             logging.info('*******End trip')
-            trip.ended_at = str(datetime.datetime.today())
+            trip.ended_at = str(datetime.datetime.today())      # record end time
 
             logging.debug('Update database')
-            trip.update(status=trip.status, ended_at=trip.ended_at)
+            trip.update(status=trip.status, ended_at=trip.ended_at)     # update trip record
             trip.save()
 
-            return_trip = Trip_test.objects.get(id=trip_id)#Query database
+            return_trip = Trip_db.objects.get(id=trip_id)     #query database
 
-            logging.info('*******Return Trip info to user')
-
-            return jsonify({'trip': return_trip})
+            return jsonify(return_trip)
 
         return jsonify({'message': 'No new trip started with this id. Start new trip first.'})
 
 api.add_resource(EndTrip, '/end/<string:trip_id>')
-
-
 
 
 
@@ -111,7 +106,7 @@ exchange = Exchange("example-exchange", type="direct")
 queue = Queue(name="example-queue", exchange=exchange, routing_key="BOB")
 
 def process_message(body, message):
-    trip = Trip_test( 
+    trip = Trip_db( 
                 status=body['status'],
                 bike_id=body['bike_id'],
                 started_at=body['started_at'],
@@ -120,12 +115,12 @@ def process_message(body, message):
                 )
 
     # id = body['id']
-    # if Trip_test.objects.with_id(id):
+    # if Trip_db.objects.with_id(id):
     #     trip.update()
     #     trip.save()
 
 
-    # trip = Trip_test( 
+    # trip = Trip_db( 
     #                 status=body['status'],
     #                 location=body['location'])
     # trip.update()

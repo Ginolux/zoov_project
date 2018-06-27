@@ -2,14 +2,24 @@ from mongoengine import Document, fields
 # from application import db
 
 
-class Bikes(Document):
-    # _id = fields.ObjectIdField()
-    # id = fields.StringField()
+class Bike_db(Document):
+    status = fields.IntField(required=True)
     location = fields.DictField(
-        btype = fields.StringField(required=True),
+        type = fields.StringField(required=True),
         coordinates = fields.ListField(required=True)
     )
-    
 
-    meta = {}
 
+class Trip_db(Document):
+    # _id = fields.ObjectIdField()
+    # id = fields.StringField()
+    bike_id = fields.StringField()
+    status = fields.IntField(required=True)
+    locations = fields.ListField(
+        fields.DictField(
+            type = fields.StringField(required=True),
+            coordinates = fields.ListField(required=True)
+        )
+    )
+    started_at = fields.StringField(required=True)
+    ended_at = fields.StringField(required=True)

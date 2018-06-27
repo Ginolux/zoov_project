@@ -1,13 +1,13 @@
 import socket
 import threading
 from uuid import uuid4
+
 from flask import Blueprint, jsonify
-# import pika
 from flask_mongoengine import mongoengine
 from flask_restful import Api, Resource
 from kombu import Connection, Consumer, Exchange, Queue
 
-from .models import Bike_srv, Bike_test
+from .models import Bike_db, Bikes
 
 bike_app = Blueprint('bike_app', __name__)
 api = Api(bike_app)
@@ -16,11 +16,9 @@ api = Api(bike_app)
 class AllBikes(Resource):
 
     def get(self):
-        # bikes = Bikes.objects.filter(id="bb3398hl52n3nnikktn0")
-        # bikes = Bikes.objects.all().values_list('id')
-        bikes = Bike_test.objects.all()
+        bikes = Bike_db.objects.all()
 
-        return jsonify({'all_bikes': bikes})
+        return jsonify(bikes)
 
 api.add_resource(AllBikes, '/')
 
@@ -28,26 +26,26 @@ api.add_resource(AllBikes, '/')
 class Bike(Resource):
 
     def get(self, bike_id):
-        bike = Bike_test.objects.filter(id=bike_id)
+        bike = Bike_db.objects.filter(id=bike_id)
 
         if not bike:
-            return {'message': 'bike not found'}
-            
-        return jsonify({'bike': bike})
+            return jsonify({'message': 'Bike not found'})
+
+        return jsonify(bike)
 
 api.add_resource(Bike, '/<string:bike_id>')
 
 
-class BikeTestDB(Resource):
+# class BikeTestDB(Resource):
 
-    def get(self):
-        # bikes = Bikes.objects.filter(id="bb3398hl52n3nnikktn0")
-        # bikes = Bikes.objects.all().values_list('id')
-        bikes = Bike_test.objects.all()
+#     def get(self):
+#         # bikes = Bikes.objects.filter(id="bb3398hl52n3nnikktn0")
+#         # bikes = Bikes.objects.all().values_list('id')
+#         bikes = Bike_test.objects.all()
 
-        return jsonify({'all_movies': bikes})
+#         return jsonify({'all_movies': bikes})
 
-api.add_resource(BikeTestDB, '/movie')
+# api.add_resource(BikeTestDB, '/movie')
 
 
 
@@ -57,9 +55,9 @@ exchange = Exchange("example-exchange", type="direct")
 queue = Queue(name="example-queue", exchange=exchange, routing_key="BOB")
 
 def process_message(body, message):
-    bike = Bike_test( 
-                status=body['status'],
-                location=body['location'])
+    # bike = Bike_db( 
+    #             status=body['status'],
+    #             location=body['location'])
 
     # id = body['id']
     # if Bike_test.objects.with_id(id):
@@ -71,7 +69,7 @@ def process_message(body, message):
     #                 status=body['status'],
     #                 location=body['location'])
     # bike.update()
-    bike.save()
+    # bike.save()
     # bike.drop_collection()
 
     print("The body is {}".format(body))
