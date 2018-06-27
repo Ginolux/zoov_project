@@ -2,3 +2,12 @@ venv
 .vscode
 zoov.code-workspace
 bike_db.json
+
+bike/__pycache__
+bike/bike_srv/__pycache__
+
+gateway/__pycache__
+gateway/gateway_srv/__pycache__
+
+trip/__pycache__
+trip/trip_srv/__pycache__
