@@ -16,7 +16,9 @@ api = Api(trip_app)
 
 
 class AllTrips(Resource):
-
+    '''
+    Return all previous trips
+    '''
     def get(self):
         trips = Trip_db.objects.all()
 
@@ -26,7 +28,9 @@ api.add_resource(AllTrips, '/')
 
 
 class Trip(Resource):
-
+    '''
+    Return a trip 
+    '''
     def get(self, trip_id):
         trip = Trip_db.objects.filter(id=trip_id)
 
@@ -37,7 +41,9 @@ api.add_resource(Trip, '/<string:trip_id>')
 
 # logging.basicConfig(level=logging.DEBUG)
 class StartTrip(Resource):
-
+    '''
+    Receive bike id and start a new trip
+    '''
     def get(self, bike_id):
         bike = Bike_db.objects.get(id=bike_id)
 
@@ -69,6 +75,9 @@ api.add_resource(StartTrip, '/start/<string:bike_id>')
 
 
 class EndTrip(Resource):
+    '''
+    End the new trip
+    '''
     def get(self, trip_id):
         trip = Trip_db.objects.get(id=trip_id)
         bike = Bike_db.objects.get(id=trip.bike_id)
@@ -124,7 +133,7 @@ def process_message(body, message):
     #                 status=body['status'],
     #                 location=body['location'])
     # trip.update()
-    trip.save()
+    # trip.save()
     # trip.drop_collection()
 
     print("The body is {}".format(body))
