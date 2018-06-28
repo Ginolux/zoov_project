@@ -102,6 +102,10 @@ class GatewayRouting(Resource):
                 r = requests.get('http://0.0.0.0:8082/start/{}'.format(given_id))
                 return r.json()
 
+            if data.status == 0:
+                r = requests.get('http://0.0.0.0:8081/{}'.format(given_id))
+                return r.json()
+
         r = requests.get('http://0.0.0.0:8082/end/{}'.format(given_id))
         return r.json()
 
