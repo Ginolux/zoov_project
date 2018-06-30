@@ -1,12 +1,11 @@
 # zoov_project
-Microservices app with Flask, MongoDB, Kombu/RabbitMQ and UI
 
-
-# Cinema 3 - (Extremely Simplified) Example of Microservices in Python
+## Microservices backend with Flask, MongoDB, Kombu/RabbitMQ
 
 
 Overview
 ========
+
 This project is a test to demonstrate the use of microvervices to achieve something similar to what are been developed at Zoov.
 
 The application is powered by 3 microservices, all of them written in Python 3 using Flask.
@@ -18,16 +17,6 @@ It also sends message to the message broker, in this case RabbitMQ, for location
 
 
 
-
-<!-- Cinema 3 is an example project which demonstrates the use of microservices for a fictional movie theater. 
-The Cinema 3 backend is powered by 4 microservices, all of which happen to be written in Python using 
-Flask.
-
- * Movie Service: Provides information like movie ratings, title, etc.
- * Show Times Service: Provides show times information.
- * Booking Service: Provides booking information. 
- * Users Service: Provides movie suggestions for users by communicating with other services. -->
-
 Requirements
 ============
 
@@ -37,11 +26,10 @@ Requirements
 * RabbitMQ 3.7.6 is the message broker used to manage events sent across services. 
 
 
-<!-- * Python 2.7
-* Works on Linux, Windows, Mac OSX and (quite possibly) BSD. -->
 
 Install
 ========
+
 * To install python 3 on Debian/Ubuntu system:
 <code>
 $ sudo apt install python3-devel
@@ -87,6 +75,7 @@ APIs and Documentation
 
 The service is used as a gateway to route request to the concerned service and receive the response from that service. It provides the informations return by the other services such as bike id, location, trip id and other information.
 
+
 * To lookup all the bikes in the database, go to:
 `http://127.0.0.1:8080`
 
@@ -108,6 +97,7 @@ The service is used as a gateway to route request to the concerned service and r
     },
 
   .......... output truncated ...............
+
 
 * To lookup by id:
 `http://127.0.0.1:8080\<id>`
@@ -142,6 +132,7 @@ Depending on the bike status (ie. bike in use or not),
 
 This service is used to get a list of bikes and a bike information.
 
+
 * To lookup all the bikes, type: 
 `http://127.0.0.1:8081`
 
@@ -150,7 +141,7 @@ This service is used to get a list of bikes and a bike information.
 
     {
         "_id": {
-        "$oid": "5b34299e4042be787bd66362"
+            "$oid": "5b34299e4042be787bd66362"
         }, 
         "location": {
         "coordinates": [
@@ -164,6 +155,7 @@ This service is used to get a list of bikes and a bike information.
 
 .......... output truncated ...............
 
+
 * To lookup by id:
 `http://127.0.0.1:8081\<id>`
 
@@ -172,7 +164,7 @@ This service is used to get a list of bikes and a bike information.
 
     {
         "_id": {
-        "$oid": "5b34fa850164c925a23a7477"
+            "$oid": "5b34fa850164c925a23a7477"
         }, 
         "location": {
         "coordinates": [
@@ -185,10 +177,12 @@ This service is used to get a list of bikes and a bike information.
     }
 
 
+
 ## Trip Service (port 8082)
 
 This service is used to get all the trips information and a speficied trip by id. When a bike id is provided, it start a trip if the correspnding bike is not in use and return the newly created trip id.
 Also, it end a trip and make the associated bike available again and return the trip to the user. It return information such as trip id, bike id, locations, start_at, end_at, status.
+
 
 * To get all the trip in the database:
 `http://127.0.0.1:8082`
@@ -213,9 +207,10 @@ Also, it end a trip and make the associated bike available again and return the 
         ], 
         "started_at": "2018-06-28 00:20:25.073834", 
         "status": 1
-    }, 
+    } 
 
 .......... output truncated ...............
+
 
 * To lookup by trip id:
 `http://127.0.0.1:8082/5b34cf89b07c1a1785db92d6`
@@ -225,7 +220,7 @@ Also, it end a trip and make the associated bike available again and return the 
 
     {
         "_id": {
-        "$oid": "5b34cf89b07c1a1785db92d6"
+            "$oid": "5b34cf89b07c1a1785db92d6"
         }, 
         "bike_id": "5b3429a44042be787bd66364", 
         "ended_at": "2018-06-28 12:09:26.388318", 
@@ -242,6 +237,7 @@ Also, it end a trip and make the associated bike available again and return the 
         "status": 1
     }
 
+
 * To start a trip, provide bike id:
 `http://127.0.0.1:8082:/5b34299e4042be787bd66362`
 
@@ -250,28 +246,31 @@ Also, it end a trip and make the associated bike available again and return the 
 	
     New trip ID	"5b37c71eb07c1a0ac37f6db9"
 
+
 * To end the trip and return the info to the user, provide the trip id:
 `http://127.0.0.1:8082/5b37c71eb07c1a0ac37f6db9`
+
     GET /5b37c71eb07c1a0ac37f6db9
     Returns the trip info
 
+{
+  "_id": {
+    "$oid": "5b37c71eb07c1a0ac37f6db9"
+  }, 
+  "bike_id": "5b34299e4042be787bd66362", 
+  "ended_at": "2018-06-30 18:13:40.680738", 
+  "locations": [
     {
-        "_id": {
-            "$oid": "5b37c71eb07c1a0ac37f6db9"
-        }, 
-        "bike_id": "5b34299e4042be787bd66362", 
-        "ended_at": "2018-06-30 18:13:40.680738", 
-        "locations": [
-            {
-            "coordinates": [
-                2.286146, 
-                48.826802
-            ], 
-            "type": "Point"
-            }
-        ], 
-        "started_at": "2018-06-30 18:08:30.415901", 
-        "status": 1
+      "coordinates": [
+        2.286146, 
+        48.826802
+      ], 
+      "type": "Point"
     }
+  ], 
+  "started_at": "2018-06-30 18:08:30.415901", 
+  "status": 1
+}
+
 
 
