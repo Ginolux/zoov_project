@@ -123,5 +123,5 @@ class GatewayPublishEvent(Resource):
 
         return {'message': 'Event published'}
 
-api.add_resource(GatewayPublishEvent, '/getevent/<string:event>')
+api.add_resource(GatewayPublishEvent, '/sendevent/<string:event>')
 

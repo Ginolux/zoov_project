@@ -1,15 +1,20 @@
-# zoov_project
+# zoov_test
 
 Microservices backend with Flask, MongoDB, Kombu/RabbitMQ
 ===========================================================
 
+## Demo
+Link to start the demo:  
+ :arrow_forward: http://52.212.180.26:8080/  
 
-Overview
+
+
+Overview :bike:
 ========
 
 This project is a test to demonstrate the use of microvervices to achieve something similar to what are been developed at Zoov.
 
-The application is powered by 3 microservices, all of them written in Python 3 using Flask.
+The application is powered by 3 microservices, all written in Python 3 using Flask.
 
 * Gateway Service: It is the main entry point of the application. It provides information like list of bikes, bike data, trip data.
 It also sends message to the message broker, in this case RabbitMQ, for location update on the two other services.
@@ -24,7 +29,7 @@ Requirements
 * This project uses python 3
 * The virtual environment requirements are in "requirements.txt"
 * The database used is MongoDB 2.6.10
-* RabbitMQ 3.7.6 is the message broker used to manage events sent across services. 
+* RabbitMQ 3.7.6 is the message broker used to manage events sent across the services. 
 
 
 
@@ -36,7 +41,7 @@ Install
 $ sudo apt install python3-devel
 ```
 
-* Install the virtual environment on Debian/Ubuntu system:
+* To install the virtual environment on Debian/Ubuntu system:
 ```
 $ pip install virtualenv
 ```
@@ -81,12 +86,11 @@ APIs and Documentation
 The service is used as a gateway to route request to the concerned service and receive the response from that service. It provides the informations return by the other services such as bike id, location, trip id and other information.
 
 
-** To lookup all the bikes in the database, go to:**
-`http://127.0.0.1:8080`
-```
-GET /
-Returns a list of all bikes.
-```
+**To lookup all the bikes in the database, go to:**  
+* `http://127.0.0.1:8080`  
+
+GET /  
+Returns a list of all bikes.  
 
 ```json
     {
@@ -106,22 +110,21 @@ Returns a list of all bikes.
   .......... output truncated ...............
 
 
-** To lookup by id:**
-`http://127.0.0.1:8080\<id>`
-Depending on the bike status (ie. bike in use or not),
+**To lookup by id:**  
+* `http://127.0.0.1:8080\<id>`  
+Depending on the bike status (ie. bike in use or not)  
 
-```
-GET /5b3429a54042be787bd6636
-Returns new trip id.
-```
+GET /5b3429a54042be787bd6636  
+Returns new trip id.  
 
 ```json
     New trip ID	"5b37bc08b07c1a0ac4cd1120"
 ```
-`or` 
+`or`  
 
-    GET /5b3429a54042be787bd6636
-    Returns the specified bike.
+GET /5b3429a54042be787bd6636  
+Returns the specified bike.  
+
 ```json
     {
         "location": {
@@ -138,18 +141,18 @@ Returns new trip id.
     }
 ```
 
+
+
 ## Bike Service (port 8081)
 
 This service is used to get a list of bikes and a bike information.
 
 
-** To lookup all the bikes, type:**
-`http://127.0.0.1:8081`
+**To lookup all the bikes, type:**  
+* `http://127.0.0.1:8081`  
 
-```
-GET /
-Returns a list of all bikes.
-```
+GET /  
+Returns a list of all bikes.  
 
 ```json
     {
@@ -170,13 +173,11 @@ Returns a list of all bikes.
 ```
 
 
-** To lookup by id:**
-`http://127.0.0.1:8081\<id>`
+**To lookup by id:**  
+* `http://127.0.0.1:8081\<id>`  
 
-```
-GET /
-Return the specified bike
-```
+GET /  
+Return the specified bike   
 
 ```json
     {
@@ -195,19 +196,18 @@ Return the specified bike
 ```
 
 
+
 ## Trip Service (port 8082)
 
 This service is used to get all the trips information and a speficied trip by id. When a bike id is provided, it start a trip if the correspnding bike is not in use and return the newly created trip id.
 Also, it end a trip and make the associated bike available again and return the trip to the user. It return information such as trip id, bike id, locations, start_at, end_at, status.
 
 
-** To get all the trip in the database:**
-`http://127.0.0.1:8082`
+**To get all the trip in the database:**  
+* `http://127.0.0.1:8082`  
 
-```
-GET /
-Returns a list of trips
-```
+GET /  
+Returns a list of trips  
 
 ```json
     {
@@ -233,13 +233,11 @@ Returns a list of trips
 ```
 
 
-** To lookup by trip id:**
-`http://127.0.0.1:8082/5b34cf89b07c1a1785db92d6`
+**To lookup by trip id:**
+* `http://127.0.0.1:8082/5b34cf89b07c1a1785db92d6`
 
-```
-GET /5b34cf89b07c1a1785db92d6
-Returns the specified trip
-```
+GET /5b34cf89b07c1a1785db92d6  
+Returns the specified trip  
 
 ```json
     {
@@ -262,25 +260,21 @@ Returns the specified trip
     }
 ```
 
-** To start a trip, provide bike id:**
-`http://127.0.0.1:8082:/5b34299e4042be787bd66362`
+**To start a trip, provide bike id:**  
+* `http://127.0.0.1:8082:/5b34299e4042be787bd66362`  
 
-```
-GET /5b34299e4042be787bd66362
-Returns the new trip id.
-```
+GET /5b34299e4042be787bd66362  
+Returns the new trip id.  
 
 ```json
     New trip ID	"5b37c71eb07c1a0ac37f6db9"
 ```
 
-** To end the trip and return the info to the user, provide the trip id:**
-`http://127.0.0.1:8082/5b37c71eb07c1a0ac37f6db9`
+**To end the trip and return the info to the user, provide the trip id:**  
+* `http://127.0.0.1:8082/5b37c71eb07c1a0ac37f6db9`  
 
-```
-GET /5b37c71eb07c1a0ac37f6db9
-Returns the trip info
-```
+GET /5b37c71eb07c1a0ac37f6db9  
+Returns the trip info  
 
 ```json
     {
