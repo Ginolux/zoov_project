@@ -1,6 +1,7 @@
 # zoov_project
 
-## Microservices backend with Flask, MongoDB, Kombu/RabbitMQ
+Microservices backend with Flask, MongoDB, Kombu/RabbitMQ
+===========================================================
 
 
 Overview
@@ -31,28 +32,32 @@ Install
 ========
 
 * To install python 3 on Debian/Ubuntu system:
-<code>
+```
 $ sudo apt install python3-devel
-</code>
+```
 
 * Install the virtual environment on Debian/Ubuntu system:
-<code>
+```
 $ pip install virtualenv
-</code>
+```
 or 
-<code>
+
+```
 $ sudo apt install virtualenv
-</code>
+```
+
 * To create a virtual environment:
 Ex: 
-<code>
+```
 $ virtualenv -p python3 venv
-</code>
+```
+
 * To install all the required modules:
 First activate the virtual environment `source venv/bin/activate` and then install the modules.
-<code>
+
+```
 $ pip install -r requirements.txt
-</code>
+```
 
 
 
@@ -60,9 +65,9 @@ Starting and Stopping Services
 ==============================
 
 * To launch the services, from each service folder, run:
-<code>
+```
 $ python manage.py runserver
-</code>
+```
 
 * To stop the services, type `Ctl+c` on the keyboard
 
@@ -76,12 +81,14 @@ APIs and Documentation
 The service is used as a gateway to route request to the concerned service and receive the response from that service. It provides the informations return by the other services such as bike id, location, trip id and other information.
 
 
-* To lookup all the bikes in the database, go to:
+** To lookup all the bikes in the database, go to:**
 `http://127.0.0.1:8080`
-
-    **GET /**
-    **Returns a list of all bikes.**
 ```
+GET /
+Returns a list of all bikes.
+```
+
+```json
     {
         "_id": {
             "$oid": "5b34299e4042be787bd66362"
@@ -99,20 +106,23 @@ The service is used as a gateway to route request to the concerned service and r
   .......... output truncated ...............
 
 
-* To lookup by id:
+** To lookup by id:**
 `http://127.0.0.1:8080\<id>`
 Depending on the bike status (ie. bike in use or not),
 
-    **GET /5b3429a54042be787bd6636**
-    **Returns new trip id.**
 ```
+GET /5b3429a54042be787bd6636
+Returns new trip id.
+```
+
+```json
     New trip ID	"5b37bc08b07c1a0ac4cd1120"
 ```
 `or` 
 
     GET /5b3429a54042be787bd6636
     Returns the specified bike.
-```
+```json
     {
         "location": {
             "type": "Point",
@@ -133,12 +143,15 @@ Depending on the bike status (ie. bike in use or not),
 This service is used to get a list of bikes and a bike information.
 
 
-* To lookup all the bikes, type: 
+** To lookup all the bikes, type:**
 `http://127.0.0.1:8081`
 
-    **GET /**
-    **Returns a list of all bikes.**
 ```
+GET /
+Returns a list of all bikes.
+```
+
+```json
     {
         "_id": {
             "$oid": "5b34299e4042be787bd66362"
@@ -152,16 +165,20 @@ This service is used to get a list of bikes and a bike information.
         }, 
         "status": 1
     }, 
-```
+
 .......... output truncated ...............
+```
 
 
-* To lookup by id:
+** To lookup by id:**
 `http://127.0.0.1:8081\<id>`
 
-    **GET /**
-    **Return the specified bike**
 ```
+GET /
+Return the specified bike
+```
+
+```json
     {
         "_id": {
             "$oid": "5b34fa850164c925a23a7477"
@@ -184,12 +201,15 @@ This service is used to get all the trips information and a speficied trip by id
 Also, it end a trip and make the associated bike available again and return the trip to the user. It return information such as trip id, bike id, locations, start_at, end_at, status.
 
 
-* To get all the trip in the database:
+** To get all the trip in the database:**
 `http://127.0.0.1:8082`
 
-    **GET /**
-    **Returns a list of trips**
 ```
+GET /
+Returns a list of trips
+```
+
+```json
     {
         "_id": {
             "$oid": "5b3429c9b07c1a09861b5da1"
@@ -208,16 +228,20 @@ Also, it end a trip and make the associated bike available again and return the 
         "started_at": "2018-06-28 00:20:25.073834", 
         "status": 1
     } 
-```
+
 .......... output truncated ...............
+```
 
 
-* To lookup by trip id:
+** To lookup by trip id:**
 `http://127.0.0.1:8082/5b34cf89b07c1a1785db92d6`
 
-    **GET /5b34cf89b07c1a1785db92d6**
-    **Returns the specified trip**
 ```
+GET /5b34cf89b07c1a1785db92d6
+Returns the specified trip
+```
+
+```json
     {
         "_id": {
             "$oid": "5b34cf89b07c1a1785db92d6"
@@ -238,21 +262,27 @@ Also, it end a trip and make the associated bike available again and return the 
     }
 ```
 
-* To start a trip, provide bike id:
+** To start a trip, provide bike id:**
 `http://127.0.0.1:8082:/5b34299e4042be787bd66362`
 
-    **GET /5b34299e4042be787bd66362**
-    **Returns the new trip id.**
 ```
+GET /5b34299e4042be787bd66362
+Returns the new trip id.
+```
+
+```json
     New trip ID	"5b37c71eb07c1a0ac37f6db9"
 ```
 
-* To end the trip and return the info to the user, provide the trip id:
+** To end the trip and return the info to the user, provide the trip id:**
 `http://127.0.0.1:8082/5b37c71eb07c1a0ac37f6db9`
 
-    **GET /5b37c71eb07c1a0ac37f6db9**
-    **Returns the trip info**
 ```
+GET /5b37c71eb07c1a0ac37f6db9
+Returns the trip info
+```
+
+```json
     {
         "_id": {
             "$oid": "5b37c71eb07c1a0ac37f6db9"
