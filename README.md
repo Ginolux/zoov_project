@@ -250,27 +250,27 @@ Also, it end a trip and make the associated bike available again and return the 
 * To end the trip and return the info to the user, provide the trip id:
 `http://127.0.0.1:8082/5b37c71eb07c1a0ac37f6db9`
 
-    GET /5b37c71eb07c1a0ac37f6db9
+   ` GET /5b37c71eb07c1a0ac37f6db9
     Returns the trip info
 
-{
-  "_id": {
-    "$oid": "5b37c71eb07c1a0ac37f6db9"
-  }, 
-  "bike_id": "5b34299e4042be787bd66362", 
-  "ended_at": "2018-06-30 18:13:40.680738", 
-  "locations": [
     {
-      "coordinates": [
-        2.286146, 
-        48.826802
-      ], 
-      "type": "Point"
-    }
-  ], 
-  "started_at": "2018-06-30 18:08:30.415901", 
-  "status": 1
-}
+    "_id": {
+        "$oid": "5b37c71eb07c1a0ac37f6db9"
+    }, 
+    "bike_id": "5b34299e4042be787bd66362", 
+    "ended_at": "2018-06-30 18:13:40.680738", 
+    "locations": [
+        {
+        "coordinates": [
+            2.286146, 
+            48.826802
+        ], 
+        "type": "Point"
+        }
+    ], 
+    "started_at": "2018-06-30 18:08:30.415901", 
+    "status": 1
+  `  }
 
 
 
