@@ -79,9 +79,9 @@ The service is used as a gateway to route request to the concerned service and r
 * To lookup all the bikes in the database, go to:
 `http://127.0.0.1:8080`
 
-    GET /
-    Returns a list of all bikes.
-
+    **GET /**
+    **Returns a list of all bikes.**
+```
     {
         "_id": {
             "$oid": "5b34299e4042be787bd66362"
@@ -95,7 +95,7 @@ The service is used as a gateway to route request to the concerned service and r
         }, 
         "status": 1
     },
-
+```
   .......... output truncated ...............
 
 
@@ -103,16 +103,16 @@ The service is used as a gateway to route request to the concerned service and r
 `http://127.0.0.1:8080\<id>`
 Depending on the bike status (ie. bike in use or not),
 
-    GET /5b3429a54042be787bd6636
-    Returns new trip id.
-
+    **GET /5b3429a54042be787bd6636**
+    **Returns new trip id.**
+```
     New trip ID	"5b37bc08b07c1a0ac4cd1120"
-
+```
 `or` 
 
     GET /5b3429a54042be787bd6636
     Returns the specified bike.
-
+```
     {
         "location": {
             "type": "Point",
@@ -126,7 +126,7 @@ Depending on the bike status (ie. bike in use or not),
         },
         "status": 0
     }
-
+```
 
 ## Bike Service (port 8081)
 
@@ -136,9 +136,9 @@ This service is used to get a list of bikes and a bike information.
 * To lookup all the bikes, type: 
 `http://127.0.0.1:8081`
 
-    GET /
-    Returns a list of all bikes.
-
+    **GET /**
+    **Returns a list of all bikes.**
+```
     {
         "_id": {
             "$oid": "5b34299e4042be787bd66362"
@@ -152,16 +152,16 @@ This service is used to get a list of bikes and a bike information.
         }, 
         "status": 1
     }, 
-
+```
 .......... output truncated ...............
 
 
 * To lookup by id:
 `http://127.0.0.1:8081\<id>`
 
-    GET /
-    Return the specified bike
-
+    **GET /**
+    **Return the specified bike**
+```
     {
         "_id": {
             "$oid": "5b34fa850164c925a23a7477"
@@ -175,7 +175,7 @@ This service is used to get a list of bikes and a bike information.
         }, 
         "status": 1.0
     }
-
+```
 
 
 ## Trip Service (port 8082)
@@ -187,9 +187,9 @@ Also, it end a trip and make the associated bike available again and return the 
 * To get all the trip in the database:
 `http://127.0.0.1:8082`
 
-    GET /
-    Returns a list of trips
-
+    **GET /**
+    **Returns a list of trips**
+```
     {
         "_id": {
             "$oid": "5b3429c9b07c1a09861b5da1"
@@ -208,16 +208,16 @@ Also, it end a trip and make the associated bike available again and return the 
         "started_at": "2018-06-28 00:20:25.073834", 
         "status": 1
     } 
-
+```
 .......... output truncated ...............
 
 
 * To lookup by trip id:
 `http://127.0.0.1:8082/5b34cf89b07c1a1785db92d6`
 
-    GET /5b34cf89b07c1a1785db92d6
-    Returns the specified trip
-
+    **GET /5b34cf89b07c1a1785db92d6**
+    **Returns the specified trip**
+```
     {
         "_id": {
             "$oid": "5b34cf89b07c1a1785db92d6"
@@ -236,41 +236,41 @@ Also, it end a trip and make the associated bike available again and return the 
         "started_at": "2018-06-28 12:07:37.470175", 
         "status": 1
     }
-
+```
 
 * To start a trip, provide bike id:
 `http://127.0.0.1:8082:/5b34299e4042be787bd66362`
 
-    GET /5b34299e4042be787bd66362
-    Returns the new trip id.
-	
+    **GET /5b34299e4042be787bd66362**
+    **Returns the new trip id.**
+```
     New trip ID	"5b37c71eb07c1a0ac37f6db9"
-
+```
 
 * To end the trip and return the info to the user, provide the trip id:
 `http://127.0.0.1:8082/5b37c71eb07c1a0ac37f6db9`
 
-   ` GET /5b37c71eb07c1a0ac37f6db9
-    Returns the trip info
-
+    **GET /5b37c71eb07c1a0ac37f6db9**
+    **Returns the trip info**
+```
     {
-    "_id": {
-        "$oid": "5b37c71eb07c1a0ac37f6db9"
-    }, 
-    "bike_id": "5b34299e4042be787bd66362", 
-    "ended_at": "2018-06-30 18:13:40.680738", 
-    "locations": [
-        {
-        "coordinates": [
-            2.286146, 
-            48.826802
+        "_id": {
+            "$oid": "5b37c71eb07c1a0ac37f6db9"
+        }, 
+        "bike_id": "5b34299e4042be787bd66362", 
+        "ended_at": "2018-06-30 18:13:40.680738", 
+        "locations": [
+            {
+            "coordinates": [
+                2.286146, 
+                48.826802
+            ], 
+            "type": "Point"
+            }
         ], 
-        "type": "Point"
-        }
-    ], 
-    "started_at": "2018-06-30 18:08:30.415901", 
-    "status": 1
-  `  }
-
+        "started_at": "2018-06-30 18:08:30.415901", 
+        "status": 1
+    }
+```
 
 
