@@ -33,11 +33,11 @@ class Trip_db(Document):
     bike_id = fields.StringField()
     status = fields.IntField(required=True)
     locations = fields.ListField(
-        fields.DictField(
+
             type = fields.StringField(required=True),
             coordinates = fields.ListField(required=True)
         )
-    )
+    
     started_at = fields.StringField(required=True)
     ended_at = fields.StringField(required=True)
 

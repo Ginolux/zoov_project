@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, make_response
 from flask_restful import Api, Resource
 
 from .models import Bike_db, Trip_db
+from .gateway_publisher import EventsPublisher
 
 
 gateway_app = Blueprint('gateway_app', __name__)
@@ -98,7 +99,6 @@ class GatewayRouting(Resource):
             data = Bike_db.objects.get(id=given_id)
 
             if data.status == 1:
-                # r = requests.get('http://0.0.0.0:8082/{}'.format(given_id))
                 r = requests.get('http://0.0.0.0:8082/start/{}'.format(given_id))
                 return r.json()
 
@@ -110,3 +110,18 @@ class GatewayRouting(Resource):
         return r.json()
 
 api.add_resource(GatewayRouting, '/<string:given_id>')
+
+
+
+class GatewayPublishEvent(Resource):
+    '''
+    Publish events received
+    '''
+    def post(self, event):
+        publisher = EventsPublisher() # Call EventsPublisher class
+        publisher.publish(event)
+
+        return {'message': 'Event published'}
+
+api.add_resource(GatewayPublishEvent, '/getevent/<string:event>')
+

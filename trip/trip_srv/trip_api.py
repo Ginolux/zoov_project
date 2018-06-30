@@ -1,15 +1,14 @@
 import datetime
 import logging
-import socket
 import threading
 from uuid import uuid4
 
 from flask import Blueprint, jsonify
 from flask_mongoengine import mongoengine
 from flask_restful import Api, Resource
-from kombu import Connection, Consumer, Exchange, Queue
 
 from .models import Bike_db, Trip_db
+from .trip_consumer import EventsConsumer
 
 trip_app = Blueprint('trip_app', __name__)
 api = Api(trip_app)
@@ -71,7 +70,7 @@ class StartTrip(Resource):
         return jsonify({'New trip ID': new_trip_id})
 
             
-api.add_resource(StartTrip, '/start/<string:bike_id>')
+api.add_resource(StartTrip, '/<string:bike_id>')
 
 
 class EndTrip(Resource):
@@ -103,69 +102,15 @@ class EndTrip(Resource):
 
         return jsonify({'message': 'No new trip started with this id. Start new trip first.'})
 
-api.add_resource(EndTrip, '/end/<string:trip_id>')
+api.add_resource(EndTrip, '/<string:trip_id>')
 
 
+'''
+Consumer deamon 
+'''
+logging.basicConfig(level=logging.DEBUG)
 
-
-
-rabbit_url = "amqp://localhost:5672/"
-conn = Connection(rabbit_url, heartbeat=10)
-exchange = Exchange("example-exchange", type="direct")
-queue = Queue(name="example-queue", exchange=exchange, routing_key="BOB")
-
-def process_message(body, message):
-    trip = Trip_db( 
-                status=body['status'],
-                bike_id=body['bike_id'],
-                started_at=body['started_at'],
-                ended_at=body['ended_at'],
-                locations=body['locations']
-                )
-
-    # id = body['id']
-    # if Trip_db.objects.with_id(id):
-    #     trip.update()
-    #     trip.save()
-
-
-    # trip = Trip_db( 
-    #                 status=body['status'],
-    #                 location=body['location'])
-    # trip.update()
-    # trip.save()
-    # trip.drop_collection()
-
-    print("The body is {}".format(body))
-    message.ack()
-
-consumer = Consumer(conn, queues=queue, callbacks=[process_message], accept=["application/json"])
-consumer.consume()
-
-def establish_connection():
-    revived_connection = conn.clone()
-    revived_connection.ensure_connection(max_retries=3)
-    channel = revived_connection.channel()
-    consumer.revive(channel)
-    consumer.consume()
-    return revived_connection
-
-def consume():
-    new_conn = establish_connection()
-    while True:
-        try:
-            new_conn.drain_events(timeout=2)
-        except socket.timeout:
-            new_conn.heartbeat_check()
-
-def consumer_deamon():
-    while True:
-        try:
-            consume()
-        except conn.connection_errors:
-            print("connection revived")
-
-# consumer_deamon()
-d = threading.Thread(name='daemon', target=consumer_deamon)
+listen = EventsConsumer()
+d = threading.Thread(name='daemon', target=listen.consumer_deamon)
 d.setDaemon(True)
 d.start()

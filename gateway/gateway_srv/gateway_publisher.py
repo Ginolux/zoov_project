@@ -12,20 +12,14 @@ class EventsPublisher():
         self.queue.maybe_bind(self.conn)
         self.queue.declare()
 
-    def publish(self):
-        body = {
-                "id": "5b3419f51cfd8f4cfe158357",
-                "status": 1,
-                "location": {
-                    "type": "Point",
-                    "coordinates": [87.2861460, 34.4535543],
-                    }
-             }
+    def publish(self, body):
+        # body = {
+        #         # "id": "bb2cdchl52n4orsopmtg",
+        #         "status": 1,
+        #         "location": {
+        #             "type": "Point",
+        #             "coordinates": [2.2861460, 48.8268020],
+        #             }
+        #      }
 
         self.producer.publish(body, serializer='json')
-
-
-
-event = EventsPublisher()
-event.publish()
-
