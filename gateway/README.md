@@ -31,8 +31,8 @@ The service is used as a gateway to route requests to the concerned service and 
 
 These are the different actions perform by the service:
 * Return the list of all the bikes from database.
-* Given a bike id, return the corresponding bike.
-* Given a bike id, start a trip if the corresponding bike is not already in use and return the newly created trip id.
+* Given a bike ID, return the corresponding bike.
+* Given a bike ID, start a trip if the corresponding bike is not already in use and return the newly created trip ID.
 * End a trip, make the associated bike available again and return the trip to the user.
 * Send an event to the message broker, RabbitMQ in this case . This event is consumed by the other services to update the bike location but also to add the point to the trip history of locations.
 
@@ -64,12 +64,12 @@ Returns a list of all bikes.
   ```
 
 
-**Given a bike id, return the corresponding bike.**  
+**Given a bike ID, return the corresponding bike.**  
 * `http://127.0.0.1:8080\<id>`  
 Depending on the bike status (ie. bike in use or not)  
 
 GET /5b3429a54042be787bd6636  
-Returns new trip id.  
+Returns new trip ID.  
 
 ```json
     New trip ID	"5b37bc08b07c1a0ac4cd1120"
@@ -96,7 +96,7 @@ Returns the specified bike.
 ```
 
 
-**Given a bike id, start a trip if the corresponding bike is not already in use and return the newly created trip id.**
+**Given a bike ID, start a trip if the corresponding bike is not already in use and return the newly created trip id.**
 * `http://127.0.0.1:8080/5b34cf89b07c1a1785db92d6`  
 
 GET /5b34299e4042be787bd66362  

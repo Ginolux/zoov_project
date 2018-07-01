@@ -3,7 +3,7 @@
 Overview :bike:
 ========
 
-* Trip Service: It takes a bike id and starts a trip if the corresponding bike is not already in use and return the newly created trip id. It ends a trip , make the associated bike available and return the trip to the user.
+* Trip Service: It takes a bike ID and starts a trip if the corresponding bike is not already in use and return the newly created trip ID. It ends a trip , make the associated bike available and return the trip to the user.
 
 
 
@@ -26,8 +26,8 @@ APIs and Documentation
 
 ## Trip Service (port 8082)
 
-This service is used to get all the trips information and a speficied trip by id. When a bike id is provided, it start a trip if the correspnding bike is not in use and return the newly created trip id.
-Also, it end a trip and make the associated bike available again and return the trip to the user. It return information such as trip id, bike id, locations, start_at, end_at, status.
+This service is used to get all the trips information and a speficied trip by ID. When a bike ID is provided, it start a trip if the correspnding bike is not in use and return the newly created trip ID.
+Also, it end a trip and make the associated bike available again and return the trip to the user. It return information such as trip ID, bike ID, locations, start_at, end_at, status.
 
 
 **To get all the trip in the database:**  
@@ -60,7 +60,7 @@ Returns a list of trips
 ```
 
 
-**To lookup by trip id:**
+**To lookup by trip ID:**
 * `http://127.0.0.1:8082/5b34cf89b07c1a1785db92d6`
 
 GET /5b34cf89b07c1a1785db92d6  
@@ -87,17 +87,17 @@ Returns the specified trip
     }
 ```
 
-**To start a trip, provide bike id:**  
+**To start a trip, provide bike ID:**  
 * `http://127.0.0.1:8082:/start/5b34299e4042be787bd66362`  
 
 GET /5b34299e4042be787bd66362  
-Returns the new trip id.  
+Returns the new trip ID.  
 
 ```json
     New trip ID	"5b37c71eb07c1a0ac37f6db9"
 ```
 
-**To end the trip and return the info to the user, provide the trip id:**  
+**To end the trip and return the info to the user, provide the trip ID:**  
 * `http://127.0.0.1:8082/end/5b37c71eb07c1a0ac37f6db9`  
 
 GET /5b37c71eb07c1a0ac37f6db9  

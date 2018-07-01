@@ -4,7 +4,8 @@ Microservices backend with Flask, MongoDB, Kombu/RabbitMQ
 ===========================================================
 
 ### Demo
-Link to start the demo :arrow_forward: http://52.212.180.26:8080/ 
+Link to start the demo :arrow_forward: http://52.212.180.26:8080/     
+
 RabbitMQ management interface on http://52.212.180.26:8888, with the username and password of guest / guest 
 
 
@@ -12,14 +13,14 @@ RabbitMQ management interface on http://52.212.180.26:8888, with the username an
 Overview :bike:
 ========
 
-This project is a test to demonstrate the use of microvervices to achieve something similar to what are been developed at Zoov.
+This project is a test to demonstrate the use of microservices to achieve something similar to what have been developed at Zoov.
 
 The application is powered by 3 microservices, all written in Python 3 using Flask.
 
-* Gateway Service: It is the main entry point of the application. It provides information like list of bikes, bike data, trip data.
-It also sends message to the message broker, in this case RabbitMQ, for location update on the two other services.
-* Bike Service: It provides the list of all bikes and return a bike data if the id is given. It also consumes event sent by the gateway to update the bikes location.
-* Trip Service: It takes a bike id and starts a trip if the corresponding bike is not already in use and return the newly created trip id. It ends a trip , make the associated bike available and return the trip to the user.
+* Gateway Service: It is the main entry point of the application. It provides information like list of bikes, bike data and trip data.
+It also sends message to the message broker, in this case RabbitMQ which is for update the bike location on the two other services.
+* Bike Service: It provides the list of all bikes and return a bike data if tidhe ID is given. It also consumes event sent by the gateway to update the bikes location.
+* Trip Service: It takes a bike ID and starts a trip if the corresponding bike is not already in use and return the newly created trip ID. It ends a trip , make the associated bike available and return the trip to the user.
 
 
 
@@ -83,7 +84,7 @@ APIs and Documentation
 
 ## Gateway Service (port 8080)
 
-The service is used as a gateway to route request to the concerned service and receive the response from that service. It provides the informations return by the other services such as bike id, location, trip id and other information.
+The service is used as a gateway to route request to the concerned service and receive the response from that service. It provides the informations return by the other services such as bike ID, location, trip ID and other information.
 
 
 **To lookup all the bikes in the database, go to:**  
@@ -110,12 +111,12 @@ Returns a list of all bikes.
   .......... output truncated ...............
 
 
-**To lookup by id:**  
+**To lookup by ID:**  
 * `http://127.0.0.1:8080\<id>`  
 Depending on the bike status (ie. bike in use or not)  
 
 GET /5b3429a54042be787bd6636  
-Returns new trip id.  
+Returns new trip ID.  
 
 ```json
     New trip ID	"5b37bc08b07c1a0ac4cd1120"
@@ -199,8 +200,8 @@ Return the specified bike
 
 ## Trip Service (port 8082)
 
-This service is used to get all the trips information and a speficied trip by id. When a bike id is provided, it start a trip if the correspnding bike is not in use and return the newly created trip id.
-Also, it end a trip and make the associated bike available again and return the trip to the user. It return information such as trip id, bike id, locations, start_at, end_at, status.
+This service is use to get all the trips information and a specify trip by ID. When a bike ID is provided, it start a trip if the corresponding bike is not in use and return the newly created trip ID.
+Also, it end a trip and make the associated bike available again and return the trip to the user. It return information such as trip ID, bike ID and locations, start_at, end_at and status.
 
 
 **To get all the trip in the database:**  
@@ -264,7 +265,7 @@ Returns the specified trip
 * `http://127.0.0.1:8082:/5b34299e4042be787bd66362`  
 
 GET /5b34299e4042be787bd66362  
-Returns the new trip id.  
+Returns the new trip ID.  
 
 ```json
     New trip ID	"5b37c71eb07c1a0ac37f6db9"

@@ -29,7 +29,7 @@ APIs and Documentation
 This service is used to get a list of bikes and a bike information. This service listen on port 8081 and exposes two endpoints.
 
 * Return the list of all the bikes from database.
-* Given a bike id, return the corresponding bike.
+* Given a bike ID, return the corresponding bike.
 
 
 
@@ -58,7 +58,7 @@ Returns a list of all bikes.
 ```
 
 
-**To lookup by id:**  
+**To lookup by ID:**  
 * `http://127.0.0.1:8081\<id>`  
 
 GET /  
