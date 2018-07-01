@@ -1,6 +1,6 @@
 # Gateway Service
 
-Overview :bike:
+Overview 
 ========
 
 * Gateway Service: It is the main entry point of the application. It provides information like list of bikes, bike data, trip data.

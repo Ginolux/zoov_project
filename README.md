@@ -19,7 +19,7 @@ The application is powered by 3 microservices, all written in Python 3 using Fla
 
 * Gateway Service: It is the main entry point of the application. It provides information like list of bikes, bike data and trip data.
 It also sends message to the message broker, in this case RabbitMQ which is for update the bike location on the two other services.
-* Bike Service: It provides the list of all bikes and return a bike data if tidhe ID is given. It also consumes event sent by the gateway to update the bikes location.
+* Bike Service: It provides the list of all bikes. It returns a bike info if the associated ID is given. It also consumes event sent by the gateway to update the bikes location.
 * Trip Service: It takes a bike ID and starts a trip if the corresponding bike is not already in use and return the newly created trip ID. It ends a trip , make the associated bike available and return the trip to the user.
 
 

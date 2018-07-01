@@ -1,8 +1,13 @@
+import logging
 import socket
 import threading
+
 from kombu import Connection, Consumer, Exchange, Queue
+
 from .models import Trip_db
 
+
+logging.basicConfig(level=logging.DEBUG)
 
 class EventsConsumer(threading.Thread):
     '''
@@ -19,29 +24,18 @@ class EventsConsumer(threading.Thread):
 
 
     def process_message(self, body, message):
-        # bike = Trip_db( 
-        #             status=body['status'],
-        #             location=body['location'])
+        '''
+        Append the new location to the trip loactions if the trip status is 0 (ie bike in use)
+        '''
 
-        if Trip_db.objects.filter(bike_id=body['id']):
-            # Trip_db.objects(bike_id=body['id']).update(add_to_set__locations=body['location'])
+        logging.info('*** Event received is: {}'.format(body))
 
-            # Trip_db.objects(bike_id=body['id']).save()
-
-
-            trip = Trip_db.objects.get(bike_id=body['id'])
-            trip.update(add_to_set__locations=body['location'])
+        if Trip_db.objects(status='0').filter(bike_id=body['id']):
+  
+            trip = Trip_db.objects(status='0').get(bike_id=body['id'])
+            trip.update(add_to_set__locations=body['location'])     # Append to the trip location
             trip.save()
-
-
-        # bike = Trip_db( 
-        #                 status=body['status'],
-        #                 location=body['location'])
-        # bike.update()
-        # bike.save()
-        # bike.drop_collection()
-
-        print("The body is {}".format(body))
+            logging.info('*** New trip location appended')
         message.ack()
 
 
@@ -52,6 +46,7 @@ class EventsConsumer(threading.Thread):
                 new_conn.drain_events(timeout=2)
             except socket.timeout:
                 new_conn.heartbeat_check()
+
 
     def establish_connection(self):
         consumer = Consumer(self.conn, queues=self.queue, callbacks=[self.process_message], accept=["application/json"])
@@ -64,9 +59,10 @@ class EventsConsumer(threading.Thread):
         consumer.consume()
         return revived_connection
     
+
     def consumer_deamon(self):
         while True:
             try:
                 self.consume()
             except self.conn.connection_errors:
-                print("connection revived")
+                logging.warning('*** Connection revived')

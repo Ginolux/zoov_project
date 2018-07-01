@@ -10,6 +10,7 @@ from flask_restful import Api, Resource
 from .models import Bike_db, Trip_db
 from .trip_consumer import EventsConsumer
 
+
 trip_app = Blueprint('trip_app', __name__)
 api = Api(trip_app)
 

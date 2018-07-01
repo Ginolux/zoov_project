@@ -1,5 +1,9 @@
+import logging
+
 from kombu import Connection, Exchange, Producer, Queue
 
+
+logging.basicConfig(level=logging.DEBUG)
 
 class EventsPublisher():
     def __init__(self):
@@ -23,3 +27,5 @@ class EventsPublisher():
         #      }
 
         self.producer.publish(body, serializer='json')
+        logging.info('*** Event published is: {}'.format(body))
+

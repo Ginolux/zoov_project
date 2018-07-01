@@ -1,6 +1,6 @@
 # Bike Service
 
-Overview :bike:
+Overview 
 ========
 
 * Bike Service: It provides the list of all bikes and return a bike data if the id is given. It also consumes event sent by the gateway to update the bikes location.

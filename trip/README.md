@@ -1,6 +1,6 @@
 # Trip Service
 
-Overview :bike:
+Overview 
 ========
 
 * Trip Service: It takes a bike ID and starts a trip if the corresponding bike is not already in use and return the newly created trip ID. It ends a trip , make the associated bike available and return the trip to the user.

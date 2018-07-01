@@ -1,8 +1,13 @@
+import logging
 import socket
 import threading
+
 from kombu import Connection, Consumer, Exchange, Queue
+
 from .models import Bike_db
 
+
+logging.basicConfig(level=logging.DEBUG)
 
 class EventsConsumer(threading.Thread):
     '''
@@ -19,24 +24,18 @@ class EventsConsumer(threading.Thread):
 
 
     def process_message(self, body, message):
-        # bike = Bike_db( 
-        #             status=body['status'],
-        #             location=body['location'])
+        '''
+        Update the bike location if bike id found
+        '''
+
+        logging.info('*** Event received is: {}'.format(body))
 
         if Bike_db.objects.with_id(body['id']):
             bike = Bike_db.objects.get(id=body['id'])
             bike.update(location=body['location'])
             bike.save()
+            logging.info('*** Bike location updated')
 
-
-        # bike = Bike_db( 
-        #                 status=body['status'],
-        #                 location=body['location'])
-        # bike.update()
-        # bike.save()
-        # bike.drop_collection()
-
-        print("The body is {}".format(body))
         message.ack()
 
 
@@ -64,4 +63,4 @@ class EventsConsumer(threading.Thread):
             try:
                 self.consume()
             except self.conn.connection_errors:
-                print("connection revived")
+                logging.warning('*** Connection revived')
