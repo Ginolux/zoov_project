@@ -13,7 +13,8 @@ class EventsConsumer(threading.Thread):
         threading.Thread.__init__(self)
         self.rabbit_url = "amqp://localhost:5672/"
         self.conn = Connection(self.rabbit_url, heartbeat=10)
-        self.exchange = Exchange("gateway-exchange", type="fanout")
+        self.channel = self.conn.channel()
+        self.exchange = Exchange(name="gateway-exchange", type="fanout")
         self.queue = Queue(name="gateway-queue", exchange=self.exchange, routing_key="gateway")
 
 

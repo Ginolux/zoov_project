@@ -12,7 +12,7 @@ It also sends message to the message broker, in this case RabbitMQ, for location
 Starting and Stopping Services
 ==============================
 
-* To launch the gateway service, from gateway folder, run:
+* To launch the gateway service, from the gateway folder, run:
 ```
 $ python manage.py runserver
 ```
@@ -59,8 +59,9 @@ Returns a list of all bikes.
         }, 
         "status": 1
     },
-```
+
   .......... output truncated ...............
+  ```
 
 
 **Given a bike id, return the corresponding bike.**  
@@ -137,10 +138,25 @@ Returns the trip info
 ```
 
 
-**Send an event to the message broker, RabbitMQ in this case . This event is consumed by the other services to update the bike location but also to add the point to the trip history of locations.**  
-* `http://127.0.0.1:8080/sendevent/<json>`  
+Messaging service: Kombu/RabbitMQ
+=================================
+In this case, the message broker used is RabbitMQ. Kombu, a messaging library for Python is used as client to connect to the broker. It provides a high-level interface for the AMQ protocol used by RabbitMQ.
 
-POST /<json>  
-Returns a message  
+Refer to the main README.md for the setup and configuration.
 
+## Gateway Producer
+The producer run on the gateway service and send events to the message broker. Those events are consumed by the other two services to update the bike location and add the point to the trip history.  
 
+Kombu, the RabbitMQ client run as deamon on different thread on the flash server and listen to event sent to the gateway service on this uri:  
+* http://127.0.0.1:8080/event  
+
+POST /event
+Return ack message
+
+```bash
+curl -i -X POST -H "Content-Type: application/json" -d "@event.json" http://127.0.0.1:8080/event
+```
+
+You will find `event.json` file in the project root folder. Run the curl command from the same directory to send the event.  
+
+Event received  by the Gateway service is instantaneously sent to the broker and published to all the subscribers.  

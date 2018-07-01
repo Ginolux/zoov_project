@@ -70,7 +70,7 @@ class StartTrip(Resource):
         return jsonify({'New trip ID': new_trip_id})
 
             
-api.add_resource(StartTrip, '/<string:bike_id>')
+api.add_resource(StartTrip, '/start/<string:bike_id>')
 
 
 class EndTrip(Resource):
@@ -102,7 +102,7 @@ class EndTrip(Resource):
 
         return jsonify({'message': 'No new trip started with this id. Start new trip first.'})
 
-api.add_resource(EndTrip, '/<string:trip_id>')
+api.add_resource(EndTrip, '/end/<string:trip_id>')
 
 
 '''

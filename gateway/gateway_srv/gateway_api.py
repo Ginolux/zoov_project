@@ -1,6 +1,7 @@
 import requests
 from flask import Blueprint, jsonify, make_response
 from flask_restful import Api, Resource
+from flask import request
 
 from .models import Bike_db, Trip_db
 from .gateway_publisher import EventsPublisher
@@ -117,11 +118,11 @@ class GatewayPublishEvent(Resource):
     '''
     Publish events received
     '''
-    def post(self, event):
-        publisher = EventsPublisher() # Call EventsPublisher class
-        publisher.publish(event)
+    def post(self):
+        json_data = request.get_json()  # Receive the data 
+        publisher = EventsPublisher()   # Call EventsPublisher class
+        publisher.publish(json_data)    # Publish the event (fanout mode)
 
         return {'message': 'Event published'}
-
-api.add_resource(GatewayPublishEvent, '/sendevent/<string:event>')
+api.add_resource(GatewayPublishEvent, '/event')
 

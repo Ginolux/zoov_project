@@ -3,9 +3,9 @@
 Microservices backend with Flask, MongoDB, Kombu/RabbitMQ
 ===========================================================
 
-## Demo
-Link to start the demo:  
- :arrow_forward: http://52.212.180.26:8080/  
+### Demo
+Link to start the demo :arrow_forward: http://52.212.180.26:8080/ 
+RabbitMQ management interface on http://52.212.180.26:8888, with the username and password of guest / guest 
 
 
 
@@ -26,9 +26,9 @@ It also sends message to the message broker, in this case RabbitMQ, for location
 Requirements
 ============
 
-* This project uses python 3
-* The virtual environment requirements are in "requirements.txt"
-* The database used is MongoDB 2.6.10
+* This project uses python 3.
+* The project requirements are in "requirements.txt" file.
+* The database used is MongoDB 2.6.10.
 * RabbitMQ 3.7.6 is the message broker used to manage events sent across the services. 
 
 
@@ -296,5 +296,49 @@ Returns the trip info
         "status": 1
     }
 ```
+
+Messaging service: Kombu/RabbitMQ
+=================================
+In this case, the message broker used is RabbitMQ. Kombu, a messaging library for Python is used as client to connect to the broker. It provides a high-level interface for the AMQ protocol used by RabbitMQ.
+
+## Setup
+RabbitMQ is deployed in docker for fast deployment. Here is the link to setup the doker container: https://hub.docker.com/_/rabbitmq/  
+  
+The management web interface run on port 8888 on the localhost with the default username and password of guest / guest.
+
+### Producer
+The producer run on the gateway service and send events to the message broker. Those events are consumed by the other two services to update the bike location and add the point to the trip history.  
+
+Kombu, the RabbitMQ client run as deamon on different thread on the flash server and listen to event sent to the gateway service on this uri:  
+* http://127.0.0.1:8080/event  
+
+POST /event
+Return ack message
+
+```bash
+curl -i -X POST -H "Content-Type: application/json" -d "@event.json" http://127.0.0.1:8080/event
+```
+
+You will find `event.json` file in the project root folder. Run the curl command from the same directory.  
+
+Event received is instantaniouly sent to the broker and published to all the subscribers.  
+
+
+### Consumers
+* Each, Bike service and Trip service run the Kombu consumer as deamon on a different thread to listen to event sent by the producer.  
+
+
+The event is used by the two services to update the bike location and the trips history of locations.
+
+
+## Configuation
+* AMQP: "amqp://localhost:5672/"
+* Producer: Deamon run on Gateway service
+* Consumer: Deamon run on both Bike and Trip services
+* Queue: name="gateway-queue"
+* Message: It comes from the `event.json` file, sent from the producer to the consumers through RabbitMQ
+* Connection: It is a TCP connection between the services and RabbitMQ broker
+* Channel: A virtual channel is created for each client when publishing or consuming messages
+* Exchange: name="gateway-exchange", type="fanout". A fanout exchange routes messages to all of the queues that are bound to it. 
 
 

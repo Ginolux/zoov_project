@@ -11,7 +11,7 @@ Overview :bike:
 Starting and Stopping Services
 ==============================
 
-* To launch the trip service, from trip folder, run:
+* To launch the trip service, from the trip folder, run:
 ```
 $ python manage.py runserver
 ```
@@ -88,7 +88,7 @@ Returns the specified trip
 ```
 
 **To start a trip, provide bike id:**  
-* `http://127.0.0.1:8082:/5b34299e4042be787bd66362`  
+* `http://127.0.0.1:8082:/start/5b34299e4042be787bd66362`  
 
 GET /5b34299e4042be787bd66362  
 Returns the new trip id.  
@@ -98,7 +98,7 @@ Returns the new trip id.
 ```
 
 **To end the trip and return the info to the user, provide the trip id:**  
-* `http://127.0.0.1:8082/5b37c71eb07c1a0ac37f6db9`  
+* `http://127.0.0.1:8082/end/5b37c71eb07c1a0ac37f6db9`  
 
 GET /5b37c71eb07c1a0ac37f6db9  
 Returns the trip info  
@@ -123,3 +123,20 @@ Returns the trip info
         "status": 1
     }
 ```
+
+
+
+Messaging service: Kombu/RabbitMQ
+=================================
+In this case, the message broker used is RabbitMQ. Kombu, a messaging library for Python is used as client to connect to the broker. It provides a high-level interface for the AMQ protocol used by RabbitMQ.  
+
+Refer to the main README.md for the setup and configuration.  
+
+
+## Trip Consumer
+* The Trip service runs the Kombu consumer as deamon on a different thread to listen to event sent by the producer.  
+
+
+The event is used by the service to update the bike location.  
+
+Starting the server autoamatically starts the consumer deamon. The debugging output in the treminal help tracking the deamon.

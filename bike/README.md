@@ -11,7 +11,7 @@ Overview :bike:
 Starting and Stopping Services
 ==============================
 
-* To launch the bike service, from bike folder, run:
+* To launch the bike service, from the bike folder, run:
 ```
 $ python manage.py runserver
 ```
@@ -80,5 +80,21 @@ Return the specified bike
     }
 ```
 
+
+
+Messaging service: Kombu/RabbitMQ
+=================================
+In this case, the message broker used is RabbitMQ. Kombu, a messaging library for Python is used as client to connect to the broker. It provides a high-level interface for the AMQ protocol used by RabbitMQ.  
+
+Refer to the main README.md for the setup and configuration.  
+
+
+## Bike Consumer
+* The Bike service runs the Kombu consumer as deamon on a different thread to listen to event sent by the producer.  
+
+
+The event is used by the service to update the bike location.  
+
+Starting the server autoamatically starts the consumer deamon. The debugging output in the treminal help tracking the deamon.
 
 
